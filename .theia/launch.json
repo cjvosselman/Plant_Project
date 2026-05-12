@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Final_Project",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Final_Project",
+                "resourceId": "/Final_Project/Final_project_main.c"
+            }
+        },
+        {
+            "name": "Final_Project (1)",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Final_Project",
+                "resourceId": "/Final_Project/timer.c"
+            }
+        },
+        {
+            "name": "Final_Project (2)",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Final_Project",
+                "resourceId": "/Final_Project/soil_sensor_main.c"
+            }
+        }
+    ]
+}
