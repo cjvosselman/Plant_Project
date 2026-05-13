@@ -9,7 +9,7 @@ CMD_SRCS += \
 ../mspm0g3507.cmd 
 
 C_SRCS += \
-../Final_project_mainOld.c \
+../Final_project_main.c \
 ../LaunchPad.c \
 ../adc.c \
 ../clock.c \
@@ -21,7 +21,7 @@ C_SRCS += \
 ../uart.c 
 
 C_DEPS += \
-./Final_project_mainOld.d \
+./Final_project_main.d \
 ./LaunchPad.d \
 ./adc.d \
 ./clock.d \
@@ -33,7 +33,7 @@ C_DEPS += \
 ./uart.d 
 
 OBJS += \
-./Final_project_mainOld.o \
+./Final_project_main.o \
 ./LaunchPad.o \
 ./adc.o \
 ./clock.o \
@@ -45,7 +45,7 @@ OBJS += \
 ./uart.o 
 
 OBJS__QUOTED += \
-"Final_project_mainOld.o" \
+"Final_project_main.o" \
 "LaunchPad.o" \
 "adc.o" \
 "clock.o" \
@@ -57,7 +57,7 @@ OBJS__QUOTED += \
 "uart.o" 
 
 C_DEPS__QUOTED += \
-"Final_project_mainOld.d" \
+"Final_project_main.d" \
 "LaunchPad.d" \
 "adc.d" \
 "clock.d" \
@@ -69,7 +69,7 @@ C_DEPS__QUOTED += \
 "uart.d" 
 
 C_SRCS__QUOTED += \
-"../Final_project_mainOld.c" \
+"../Final_project_main.c" \
 "../LaunchPad.c" \
 "../adc.c" \
 "../clock.c" \

@@ -1,3 +1,20 @@
+// *****************************************************************************
+// ***************************    C Source Code     ****************************
+// *****************************************************************************
+//   DESIGNER NAME:  Joshua Carlson and Casey Vosselman
+//
+//
+//       FILE NAME:  timer.c
+//
+//-----------------------------------------------------------------------------
+// DESCRIPTION
+//    This file contains functions for configuring and managing TIMG8 and TIMA
+//    in order to create a counting uo timer and control pulse width modulation
+//    for the servo motor and light adjuster.
+//
+// *****************************************************************************
+//******************************************************************************
+
 //-----------------------------------------------------------------------------
 // Loads standard C include files
 //-----------------------------------------------------------------------------
@@ -15,10 +32,37 @@
 #include <ti/devices/msp/msp.h>
 #include <ti/devices/msp/peripherals/hw_iomux.h>
 
+// Global variables for the ones and tens place of the counter
 volatile uint8_t ones_seconds = 0;
 volatile uint8_t tens_seconds = 0;
 
-void TIMG8_config(uint32_t load_value, uint32_t compare_value) {
+//-----------------------------------------------------------------------------
+// DESCRIPTION:
+//
+//   This function initializes and configures the TIMG8 peripheral in order to
+//   act as a counter that ticks every one second
+//
+//   The initialization process includes the following steps:
+//   - Resetting TIMG8
+//   - Enabling Power to the timer
+//   - Configuring the Timer clock
+//   - Setting TIMG8_03 as output
+//   - Enabling the counter
+//   - Setting the Load Value
+//
+//
+//
+// INPUT PARAMETERS:
+//   load_value - The number in which the timer counts a tick
+//
+//
+// OUTPUT PARAMETERS:
+//   none
+//
+// RETURN:
+//   none
+// -----------------------------------------------------------------------------
+void TIMG8_config(uint32_t load_value) {
 
   IOMUX->SECCFG.PINCM[IOMUX_PINCM32] =
       IOMUX_PINCM32_PF_TIMG8_CCP0 | IOMUX_PINCM_PC_CONNECTED;
@@ -132,7 +176,7 @@ void TIMG8_enable_interrupt(void) {
       GPTIMER_CPU_INT_ICLR_CCU4_CLR | GPTIMER_CPU_INT_ICLR_CCU5_CLR |
       GPTIMER_CPU_INT_ICLR_Z_CLR | GPTIMER_CPU_INT_ICLR_L_CLR;
 
-  // Unmask conditions to allow interrupt
+  // Unmask conditions to allow Load interrupt
   TIMG8->CPU_INT.IMASK = GPTIMER_CPU_INT_IMASK_L_SET;
 
   // Set priority and enable
@@ -145,14 +189,13 @@ void TIMG8_enable_interrupt(void) {
 //    interrupt index register (IIDX) to identify the type of interrupt event
 //    that occurred. Based on the interrupt event, the function processes the
 //    event accordingly:
-//     - Zero event (Z): Counts the number of time the ISR is called. After
-//                       the appropriate delay, the count value is decremented
-//                       and sent to the seven-segment display.
+//     - Load event (L): Counts the number of times the timer reaches the load
+//     value and counts a second using the global variables ones_seconds and
+//     tens_seconds
 //
 //    The function continues checking for interrupts until all events are
 //    cleared.
 //
-//    NOTE: ADJUST PROCESSING AS NEEDED
 //
 // INPUT PARAMETERS:
 //     None
@@ -176,27 +219,25 @@ void TIMG8_IRQHandler(void) {
 
     // Check if load event
     case (GPTIMER_CPU_INT_IIDX_STAT_L):
-      // isr_call_count++;
-      // if (isr_call_count >= 1000)
-      // {
-      //   isr_call_count = 0;
 
-      // }
+      // Counts a second
       ones_seconds++;
 
+      // Resets the ones place once it reaches 9 to simulate the tens place
+      // incrementing
       if (ones_seconds > 9) {
         tens_seconds++;
         ones_seconds = 0;
       }
+      // Resets the tens and ones place to reset the timer once the count
+      // reaches 31 days, signifying 31 days
       if (tens_seconds == 3) {
-      
-      if (ones_seconds > 1)
-      {
-        tens_seconds = 0;
-        ones_seconds = 0;
+
+        if (ones_seconds > 1) {
+          tens_seconds = 0;
+          ones_seconds = 0;
+        }
       }
-      }
-      
 
       break;
 
@@ -225,13 +266,58 @@ void TIMG8_IRQHandler(void) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// DESCRIPTION:
+//    This function configures the IOMUX to drive a motor using PWM. It
+//    repurposes pin PA19 to use as a timer for PWM
+//
+//
+// INPUT PARAMETERS:
+//     None
+//
+// OUTPUT PARAMETERS:
+//     None
+//
+// RETURN:
+//     None
+//-----------------------------------------------------------------------------
 void TIMA0_C0_init(void) {
-  // Set PA28 (LD0) for TIMA0_C0
+  // Set PA19 for TIMA0_C0
   IOMUX->SECCFG.PINCM[IOMUX_PINCM19] =
       IOMUX_PINCM19_PF_TIMA0_CCP0 | IOMUX_PINCM_PC_CONNECTED;
 
 } /* TimA0_C0_init */
 
+// DESCRIPTION:
+//    This function configures the IOMUX to drive a motor using PWM. It
+//    repurposes pin PA19 to use as a timer for PWM. TIMA0 is used to gemerate
+//    PWM signals in order to increment and decrement the LED for the light
+//    adjustment
+//
+// The initialization process includes the following steps:
+//   - Resetting TIMA0
+//   - Enabling Power to the timer
+//   - Configuring the Timer clock
+//   - Setting TIMG8_03 as output
+//   - Enabling the counter
+//   - Setting the Load Value
+//   - Setting the timer compare value
+//   - Set compare control for PWM function
+//   - Set capture mode to have immediate effect
+//   - Enable counter to count up
+//   - Set TIMA0_C0 as output
+//
+// INPUT PARAMETERS:
+//     load_value - The number in which the timer counts a tick
+//
+//     compare_value - The number that the timer uses to output signals for the
+//     PWM
+//
+// OUTPUT PARAMETERS:
+//     None
+//
+// RETURN:
+//     None
+//-----------------------------------------------------------------------------
 void TIMA0_C0_pwm_init(uint32_t load_value, uint32_t compare_value) {
   // Reset TIMA0
   TIMA0->GPRCM.RSTCTL =
@@ -310,10 +396,40 @@ void TIMA0_C0_pwm_init(uint32_t load_value, uint32_t compare_value) {
 
 } /* TIMA0_C0_pwm_init */
 
+//-----------------------------------------------------------------------------
+// DESCRIPTION:
+//    This function enables the timer, allowing the PWM signal generation 
+//    to begin.
+//
+// INPUT PARAMETERS:
+//  none
+//
+// OUTPUT PARAMETERS:
+//  none
+//
+// RETURN:
+//  none
+// -----------------------------------------------------------------------------
 void TIMA0_C0_pwm_enable(void) {
   TIMA0->COUNTERREGS.CTRCTL |= (GPTIMER_CTRCTL_EN_ENABLED);
 } /*TIMA0_C0_pwm_enable */
 
+//-----------------------------------------------------------------------------
+// DESCRIPTION:
+//    This function adjusts the PWM signal by setting the timer's threshold 
+//    based on the given duty cycle percentage. The threshold is percentage 
+//    of the terminal count (load value) of the timer.
+//
+// INPUT PARAMETERS:
+//    duty_cycle - an 8-bit value that represents the desired duty cycle 
+//                 percentage (0-100) used to calculate the timer's threshold.
+//
+// OUTPUT PARAMETERS:
+//    none
+//
+// RETURN:
+//    none
+// -----------------------------------------------------------------------------
 void TIMA0_C0_set_pwm_dc(uint8_t duty_cycle) {
   uint32_t threshold = (TIMA0->COUNTERREGS.LOAD * duty_cycle) / 100;
 

@@ -16,7 +16,7 @@
 #define SECONDS_PER_COUNT (1)
 #define MAX_ISR_COUNT_DELAY (SECONDS_PER_COUNT * 1E3)
 
-void TIMG8_config(uint32_t load_value, uint32_t compare_value);
+void TIMG8_config(uint32_t load_value);
 void TIMG8_enable(void);
 void TIMG8_disable(void);
 void TIMG8_enable_interrupt(void);

@@ -1,4 +1,4 @@
-"./Final_project_mainOld.o"
+"./Final_project_main.o"
 "./LaunchPad.o"
 "./adc.o"
 "./clock.o"

@@ -10,7 +10,7 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./Final_project_mainOld.o" \
+"./Final_project_main.o" \
 "./LaunchPad.o" \
 "./adc.o" \
 "./clock.o" \
@@ -153,8 +153,8 @@ Final_Project.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Final_project_mainOld.o" "LaunchPad.o" "adc.o" "clock.o" "lcd1602.o" "light_sensor.o" "soil_sensor.o" "spi.o" "timer.o" "uart.o" "ticlang\startup_mspm0g3507_ticlang.o" 
-	-$(RM) "Final_project_mainOld.d" "LaunchPad.d" "adc.d" "clock.d" "lcd1602.d" "light_sensor.d" "soil_sensor.d" "spi.d" "timer.d" "uart.d" "ticlang\startup_mspm0g3507_ticlang.d" 
+	-$(RM) "Final_project_main.o" "LaunchPad.o" "adc.o" "clock.o" "lcd1602.o" "light_sensor.o" "soil_sensor.o" "spi.o" "timer.o" "uart.o" "ticlang\startup_mspm0g3507_ticlang.o" 
+	-$(RM) "Final_project_main.d" "LaunchPad.d" "adc.d" "clock.d" "lcd1602.d" "light_sensor.d" "soil_sensor.d" "spi.d" "timer.d" "uart.d" "ticlang\startup_mspm0g3507_ticlang.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

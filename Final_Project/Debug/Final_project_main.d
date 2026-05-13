@@ -1,7 +1,7 @@
 # FIXED
 
-Final_project_mainOld.o: ../Final_project_mainOld.c ../LaunchPad.h \
- ../adc.h ../clock.h ../lcd1602.h ../light_sensor.h ../soil_sensor.h \
+Final_project_main.o: ../Final_project_main.c ../LaunchPad.h ../adc.h \
+ ../clock.h ../lcd1602.h ../light_sensor.h ../soil_sensor.h \
  C:/ti/mspm0_sdk_2_04_00_06/source/ti/devices/msp/msp.h \
  C:/ti/mspm0_sdk_2_04_00_06/source/ti/devices/DeviceFamily.h \
  C:/ti/mspm0_sdk_2_04_00_06/source/ti/devices/msp/m0p/mspm0g350x.h \
