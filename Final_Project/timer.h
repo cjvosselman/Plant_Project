@@ -16,11 +16,11 @@
 #define SECONDS_PER_COUNT (1)
 #define MAX_ISR_COUNT_DELAY (SECONDS_PER_COUNT * 1E3)
 
-void timerA_config(uint32_t load_value, uint32_t compare_value);
-void timerA_enable(void);
-void timerA_disable(void);
-void timerA_enable_interrupt(void);
-void TIMA0_IRQHandler(void);
+void TIMG8_config(uint32_t load_value, uint32_t compare_value);
+void TIMG8_enable(void);
+void TIMG8_disable(void);
+void TIMG8_enable_interrupt(void);
+void TIMG8_IRQHandler(void);
 
 
 void TIMA0_C0_init(void);

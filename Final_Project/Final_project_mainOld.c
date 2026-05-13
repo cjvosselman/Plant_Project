@@ -33,12 +33,12 @@
 #include "adc.h"
 #include "clock.h"
 #include "lcd1602.h"
+#include "light_sensor.h"
+#include "soil_sensor.h"
 #include "spi.h"
 #include "timer.h"
 #include "uart.h"
 #include <ti/devices/msp/msp.h>
-#include "soil_sensor.h"
-#include "light_sensor.h"
 
 //-----------------------------------------------------------------------------
 // Define function prototypes used by the program
@@ -55,7 +55,6 @@ void lcd_write_string_window(const char string[], uint8_t start_lcd_addr,
                              uint8_t max_lcd_addr);
 
 bool days_since_watered();
-
 
 void interrupt_buzz();
 
@@ -92,10 +91,9 @@ void interrupt_buzz();
 #define soil_threshold 2200 // Dry is above | Wet is below
 #define adc_to_tens(adc_val) ((adc_val) * (10 / adc12_max))
 
-#define tick_to_sec(tick_counter) (tick_counter/10)
+#define tick_to_sec(tick_counter) (tick_counter / 10)
 
 #define buzzer_enable (LP_RGB_BLU_LED_IDX)
-#define dry_soil_value 3000
 
 #define MAX_DUTY_CYCLE 100
 #define MIN_DUTY_CYCLE 0
@@ -105,19 +103,21 @@ void interrupt_buzz();
 //-----------------------------------------------------------------------------
 bool g_pb2_pressed = false;
 bool g_pb1_pressed = false;
+extern uint8_t duty_cycle;
 
-/*extern volatile uint8_t ones_seconds;
-extern volatile uint8_t tens_seconds;*/
+extern volatile uint8_t ones_seconds;
+extern volatile uint8_t tens_seconds;
 
 volatile uint8_t tick_counter;
 
 // Define a structure to hold different data types
-typedef enum {STANDBY,
-              LIGHT_DISPLAY,
-              MOISTURE_DISPLAY,
-              MOISTURE_ALERT,
-              LIGHT_CORRECTION,                   
-             } PLNT_STS_t;
+typedef enum {
+  STANDBY,
+  LIGHT_DISPLAY,
+  MOISTURE_DISPLAY,
+  MOISTURE_ALERT,
+  LIGHT_CORRECTION,
+} PLNT_STS_t;
 
 int main(void) {
   // Configure the LaunchPad board
@@ -128,9 +128,9 @@ int main(void) {
   lcd1602_init();
   UART_init(115200);
   seg7_init();
-  timerA_config(LOAD_VALUE, COMPARE_VALUE);
-  timerA_enable_interrupt();
-  timerA_enable();
+  TIMG8_config(LOAD_VALUE, COMPARE_VALUE);
+  TIMG8_enable_interrupt();
+  TIMG8_enable();
   ADC0_init(ADC12_MEMCTL_VRSEL_VDDA_VSSA);
   ADC1_init(ADC12_MEMCTL_VRSEL_INTREF_VSSA);
   TIMA0_C0_init();
@@ -139,7 +139,7 @@ int main(void) {
   lp_leds_init();
 
   // Enable interrupts
-  
+
   config_pb1_interrupt();
   config_pb2_interrupt();
 
@@ -153,23 +153,16 @@ int main(void) {
 
 } /* main */
 
-// Notes from Casey: 
-// Systick could be used to keep track of the timer
-// Timer can be used to call functions when timer reaches zero. 
-
 void run_monitoring_system() {
 
   bool done = false;
-  PLNT_STS_t state = 0;
+  PLNT_STS_t state = STANDBY;
 
   while (!done) {
 
-    lcd_set_ddram_addr(LCD_LINE1_ADDR);
-    lcd_write_string("Plant Monitoring");
-    lcd_set_ddram_addr(LCD_LINE2_ADDR + LCD_CHAR_POSITION_6);
-    lcd_write_string("Active");
-    uint16_t soil_value = soil_read();
-    uint16_t light_value = light_read();
+    bool dry = false;
+    uint16_t soil_value = ADC0_in(5);
+    uint16_t light_value = ADC1_in(6);
 
     if (g_pb1_pressed) {
       if (state == STANDBY) {
@@ -191,35 +184,34 @@ void run_monitoring_system() {
       g_pb2_pressed = false;
     }
 
-    if (soil_read > (uint16_t) dry_soil_value)
-    {
+    if (soil_value > (uint16_t)dry_soil_value) {
       state = MOISTURE_ALERT;
-    }
-    else {
-    state = STANDBY; 
+      dry = true;
     }
 
-    if ((light_value > light_threshold) || (light_value < dark_threshold))
-    {
+    if ((light_value > light_threshold) || (light_value < dark_threshold)) {
       state = LIGHT_CORRECTION;
     }
-    else{
-    state = STANDBY;
-    }
+
+    seg7_hex(ones_seconds, SEG7_DIG3_ENABLE_IDX);
+    msec_delay(5);
+    seg7_hex(tens_seconds, SEG7_DIG2_ENABLE_IDX);
+    msec_delay(2);
+
     switch (state) {
     case (STANDBY):
 
-    lcd_set_ddram_addr(LCD_LINE1_ADDR);
-    lcd_write_string("Plant Monitoring");
-    lcd_set_ddram_addr(LCD_LINE2_ADDR + LCD_CHAR_POSITION_6);
-    lcd_write_string("Active");
+      lcd_set_ddram_addr(LCD_LINE1_ADDR);
+      lcd_write_string("Plant Monitoring");
+      lcd_set_ddram_addr(LCD_LINE2_ADDR);
+      lcd_write_string("     Active     ");
 
-    break;
+      break;
 
     case (LIGHT_DISPLAY):
 
       light_display(light_value);
-      
+
       break;
 
     case (MOISTURE_DISPLAY):
@@ -229,22 +221,26 @@ void run_monitoring_system() {
       break;
 
     case (MOISTURE_ALERT):
-    interrupt_buzz();
-    watering_system(false);
-    water_plant();
-    state = 0;
+      lcd_clear();
+      interrupt_buzz();
+      watering_system(dry);
+      dry = 0;
+      state = 0;
 
-    break;
+      break;
 
     case (LIGHT_CORRECTION):
-    light_correction(light_value);
-    break;
+      lcd_set_ddram_addr(LCD_LINE1_ADDR + LCD_CHAR_POSITION_13);
+      lcd_write_string("    ");
+      light_correction(light_value);
+
+      state = 0;
+      break;
     }
   }
-  }
+}
 
-
-// Utility Functions 
+// Utility Functions
 
 void GROUP1_IRQHandler(void) {
   uint32_t group_iidx_status;
@@ -337,106 +333,22 @@ void config_pb2_interrupt() {
   NVIC_SetPriority(GPIOA_INT_IRQn, 2);
   NVIC_EnableIRQ(GPIOA_INT_IRQn);
 }
-void scroll_message(const char string[], uint8_t line) {
 
-  // Clears the lcd, disables leds, and initializes switches
-  lcd_set_ddram_addr(line);
-  lcd_write_string("                ");
-  leds_disable();
-  dipsw_init();
-
-  // Creates variable for the string, done flag, and for tracking the current
-  // address and character
-
-  uint8_t led_address;
-  uint8_t character;
-  bool done = false;
-  uint8_t scroll_count = 0;
-
-  // While done flag is false
-  while (!done) {
-    // for loop to iterate through lcd addresses
-    for (led_address = (line + LCD_CHAR_POSITION_16);
-         (led_address > line) && !done; led_address--) {
-      // Clears lcd and displays the string using newly created function
-      lcd_write_string("                ");
-      lcd_set_ddram_addr(led_address);
-      lcd_write_string_window(string, led_address, line + LCD_CHAR_POSITION_16);
-      msec_delay(CYCLE_DELAY);
-    }
-
-    // Creates variable to track the string index
-    uint8_t index = 0;
-
-    // While the current index character isn't null and done flag is false
-    while ((string[index] != '\0') && !done) {
-      // Clears lcd and displays string using the newly created function
-      lcd_write_string("                ");
-      lcd_set_ddram_addr(line);
-      lcd_write_string_window((string + index), line,
-                              line + LCD_CHAR_POSITION_16);
-      index++;
-      msec_delay(CYCLE_DELAY);
-    }
-    scroll_count++;
-    if (scroll_count == 1) {
-      done = true;
-    }
-  }
-  // Clears lcd and turns seg7 display off, Displays part 2 done and then clears
-  // lcd
-  lcd_clear();
-  seg7_off();
-}
-
-// DESCRIPTION:
-//  This function displays the string while taking into account whether the
-//  string will fit in the lcd line based on the start and max address
-//
-// INPUT PARAMETERS:
-//    string[]  - A char array that represents the inputted string to be
-//    displayed to the lcd
-//
-//    start_lcd_addr - The starting LCD address where the message should start
-//                     on
-//
-//    max_lcd_addr - The ending LCD address where the message should stop on
-//
-// OUTPUT PARAMETERS:
-//    none
-//
-// RETURN:
-//   none
-// -----------------------------------------------------------------------------
-void lcd_write_string_window(const char string[], uint8_t start_lcd_addr,
-                             uint8_t max_lcd_addr) {
-  // counter to track whether or not the current address is within range
-  uint8_t counter = 0;
-
-  // while the string isn't null and the counter is within 0-15
-  while ((*string != '\0') && (counter <= (max_lcd_addr - start_lcd_addr))) {
-    lcd_write_char(*string++);
-    counter++;
-  } /* while */
-}
-
-void interrupt_buzz()
-{
+void interrupt_buzz() {
   uint8_t beeps = 0;
-  
+
   while (beeps < 2) {
 
-  lp_leds_on(buzzer_enable);
-  msec_delay(100);
-  lp_leds_off(buzzer_enable);
+    lp_leds_on(buzzer_enable);
+    msec_delay(100);
+    lp_leds_off(buzzer_enable);
 
-  beeps++;
+    beeps++;
   }
-  
 }
 
 void watering_system(bool moisture_level) {
-  if (moisture_level == false) {
+  if (moisture_level == true) {
 
     lcd_set_ddram_addr(LCD_LINE1_ADDR);
     lcd_write_string("Water level:LOW ");
@@ -459,24 +371,23 @@ void watering_system(bool moisture_level) {
 
 void water_plant() {
 
-  uint8_t count = 0;
-
   motor0_init();
   motor0_pwm_init(4000, 0);
 
-    motor0_set_pwm_count(SERVO_MIN_COUNT);
-    motor0_pwm_enable();
-    msec_delay(SERVO_PWM_UPDATE_DELAY);
-    msec_delay(200);
-    motor0_set_pwm_count(SERVO_MAX_COUNT);
-    msec_delay(SERVO_PWM_UPDATE_DELAY);
-    msec_delay(200);
+  motor0_set_pwm_count(SERVO_MIN_COUNT);
+  motor0_pwm_enable();
+  msec_delay(SERVO_PWM_UPDATE_DELAY);
+  msec_delay(500);
+  motor0_set_pwm_count(SERVO_MAX_COUNT);
+  msec_delay(SERVO_PWM_UPDATE_DELAY);
+  msec_delay(500);
+  motor0_set_pwm_count(SERVO_MIN_COUNT);
+  msec_delay(SERVO_PWM_UPDATE_DELAY);
   motor0_pwm_disable();
-  }
+  msec_delay(1000);
+}
 
-
-bool days_since_watered() 
-{
+bool days_since_watered() {
   bool done = false;
   uint8_t sec_count = 0;
   uint8_t hour_count = 0;
@@ -485,133 +396,15 @@ bool days_since_watered()
 
   if (sec_count == 1)
     return true;
-  sec_count = tick_to_sec(tick_counter); 
+  sec_count = tick_to_sec(tick_counter);
   if (sec_count == 59) {
     minute_count++;
     sec_count = 0;
-  }
-  else if (minute_count == 59) {
+  } else if (minute_count == 59) {
     hour_count++;
     minute_count = 0;
-  }
-  else if (hour_count == 24) {
+  } else if (hour_count == 24) {
     day_count++;
     hour_count = 0;
   }
-
 }
-
-/*
-
-uint16_t soil_read()
- {
-  uint16_t soil_value = 0;
-
-  soil_value = ADC0_in(5);
-  return soil_value;
-}
-
-void display_soil(uint16_t adc_reading)
-{
-  uint8_t led_idx = 0;
-  uint16_t moisture_level = adc_reading; 
-  uint16_t moisture_value = (moisture_level/step_size);
-
-   lcd_set_ddram_addr(LCD_LINE1_ADDR);
-
-    if (moisture_level < dry_soil_value) 
-    {
-      lcd_write_string("Status: Soil Wet");
-    } 
-    else if (moisture_level > dry_soil_value) 
-    {
-      lcd_write_string("Status: Soil Dry");
-    }
-
-    lcd_write_string("ADC:");
-
-    lcd_set_ddram_addr(LCD_LINE2_ADDR);
-
-    lcd_write_doublebyte(moisture_level);
-}
-
-void average_adc_values() {
-  ADC0->ULLMEM.MEMCTL[0] = ADC12_MEMCTL_AVGEN_ENABLE;
-  ADC0->ULLMEM.CTL1 = ADC12_CTL1_AVGN_AVG_16 | ADC12_CTL1_AVGD_SHIFT4;
-}
-
-uint16_t light_read() {
-  bool done = false;
-  uint16_t light_read = 0;
-  char adc_text[] = "ADC = ";
-  char light_text[] = "Light = ";
-  static uint8_t increment = 1;
-  uint8_t duty_cycle = 0;
-
-  light_read = ADC1_in(6);
-  return light_read;
-  }
-  
-  void light_display(uint16_t adc_reading)
-  {
-
-  uint16_t light_read = adc_reading;
-  char adc_text[] = "ADC = ";
-  char light_text[] = "Light = ";
-  static uint8_t increment = 1;
-  uint8_t duty_cycle = 0;
-
-  lcd_set_ddram_addr(LCD_LINE1_ADDR);
-  lcd_write_string(adc_text);
-  lcd_set_ddram_addr(LCD_LINE1_ADDR + LCD_CHAR_POSITION_8);
-  lcd_write_doublebyte(light_read);
-  lcd_set_ddram_addr(LCD_LINE2_ADDR);
-  lcd_write_string(light_text);
-  lcd_set_ddram_addr(LCD_LINE2_ADDR + LCD_CHAR_POSITION_9);
-
-  if (light_read > light_threshold) {
-    if (duty_cycle >= MIN_DUTY_CYCLE) {
-      duty_cycle -= increment;
-      TIMA0_C0_set_pwm_dc(duty_cycle);
-      TIMA0_C0_pwm_enable();
-      msec_delay(200);
-      light_read = ADC1_in(6);
-      lcd_set_ddram_addr(LCD_LINE1_ADDR + LCD_CHAR_POSITION_8);
-      lcd_write_doublebyte(light_read);
-      lcd_set_ddram_addr(LCD_LINE2_ADDR + LCD_CHAR_POSITION_9);
-      lcd_write_string("Bright ");
-    }
-  }
-
-  else if (light_read < dark_threshold) {
-    if (duty_cycle <= MAX_DUTY_CYCLE) {
-      duty_cycle += increment;
-      TIMA0_C0_set_pwm_dc(duty_cycle);
-      TIMA0_C0_pwm_enable();
-      msec_delay(200);
-      light_read = ADC1_in(6);
-      lcd_set_ddram_addr(LCD_LINE1_ADDR + LCD_CHAR_POSITION_8);
-      lcd_write_doublebyte(light_read);
-      lcd_set_ddram_addr(LCD_LINE2_ADDR + LCD_CHAR_POSITION_9);
-      lcd_write_string("Dark   ");
-    }
-  } else {
-    TIMA0_C0_set_pwm_dc(duty_cycle);
-    TIMA0_C0_pwm_enable();
-    lcd_set_ddram_addr(LCD_LINE2_ADDR + LCD_CHAR_POSITION_9);
-    lcd_write_string("Perfect");
-  }
-}
-
-void soil_intensity(uint16_t adc_reading)
-{
-  uint8_t led_idx = 0;
-  uint8_t moisture_level = adc_reading; 
-  uint16_t moisture_value = (moisture_level/step_size);
-
-  leds_off();
-
-  for (led_idx = 0; led_idx < moisture_value; led_idx++) {
-    led_on(led_idx);
-  }
-}*/

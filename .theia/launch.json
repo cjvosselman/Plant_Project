@@ -54,6 +54,24 @@
                 "name": "Final_Project",
                 "resourceId": "/Final_Project/Final_project_mainOld.c"
             }
+        },
+        {
+            "name": "Final_Project (6)",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Final_Project",
+                "resourceId": "/Final_Project/light_sensor.c"
+            }
+        },
+        {
+            "name": "Final_Project (7)",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Final_Project",
+                "resourceId": "/Final_Project/LaunchPad.c"
+            }
         }
     ]
 }

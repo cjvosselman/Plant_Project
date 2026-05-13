@@ -18,7 +18,7 @@
 volatile uint8_t ones_seconds = 0;
 volatile uint8_t tens_seconds = 0;
 
-void timerA_config(uint32_t load_value, uint32_t compare_value) {
+void TIMG8_config(uint32_t load_value, uint32_t compare_value) {
 
   IOMUX->SECCFG.PINCM[IOMUX_PINCM32] =
       IOMUX_PINCM32_PF_TIMG8_CCP0 | IOMUX_PINCM_PC_CONNECTED;
@@ -79,7 +79,7 @@ void timerA_config(uint32_t load_value, uint32_t compare_value) {
 // RETURN:
 //    none
 // -----------------------------------------------------------------------------
-void timerA_enable(void) {
+void TIMG8_enable(void) {
   TIMG8->COUNTERREGS.CTRCTL |= (GPTIMER_CTRCTL_EN_ENABLED);
 } /* timerA_enable */
 //------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ void timerA_enable(void) {
 // RETURN:
 //  none
 // -----------------------------------------------------------------------------
-void timerA_disable(void) {
+void TIMG8_disable(void) {
   TIMG8->COUNTERREGS.CTRCTL &= ~(GPTIMER_CTRCTL_EN_ENABLED);
 } /* timerA_disable */
 
@@ -119,7 +119,7 @@ void timerA_disable(void) {
 // RETURN:
 //     None
 //-----------------------------------------------------------------------------
-void timerA_enable_interrupt(void) {
+void TIMG8_enable_interrupt(void) {
   // Clear all pre-existing interrupts that might be set
   TIMG8->CPU_INT.ICLR =
       GPTIMER_CPU_INT_ICLR_DC_CLR | GPTIMER_CPU_INT_ICLR_REPC_CLR |
@@ -167,8 +167,6 @@ void TIMG8_IRQHandler(void) {
   uint32_t timer_iidx;
   static uint16_t isr_call_count = MAX_ISR_COUNT_DELAY;
 
-  
-
   do {
     timer_iidx = TIMG8->CPU_INT.IIDX;
     switch (timer_iidx) {
@@ -185,16 +183,19 @@ void TIMG8_IRQHandler(void) {
 
       // }
       ones_seconds++;
-      if (ones_seconds > 9)
-      {
+
+      if (ones_seconds > 9) {
         tens_seconds++;
         ones_seconds = 0;
       }
-      if (tens_seconds > 9)
+      if (tens_seconds == 3) {
+      
+      if (ones_seconds > 1)
       {
         tens_seconds = 0;
+        ones_seconds = 0;
       }
-      
+      }
       
 
       break;
@@ -224,29 +225,28 @@ void TIMG8_IRQHandler(void) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-void TIMA0_C0_init(void)
-{
+void TIMA0_C0_init(void) {
   // Set PA28 (LD0) for TIMA0_C0
-  IOMUX->SECCFG.PINCM[IOMUX_PINCM19] = IOMUX_PINCM19_PF_TIMA0_CCP0 | 
-                                    IOMUX_PINCM_PC_CONNECTED;
+  IOMUX->SECCFG.PINCM[IOMUX_PINCM19] =
+      IOMUX_PINCM19_PF_TIMA0_CCP0 | IOMUX_PINCM_PC_CONNECTED;
 
 } /* TimA0_C0_init */
 
-void TIMA0_C0_pwm_init(uint32_t load_value, uint32_t compare_value)
-{
+void TIMA0_C0_pwm_init(uint32_t load_value, uint32_t compare_value) {
   // Reset TIMA0
-  TIMA0->GPRCM.RSTCTL = (GPTIMER_RSTCTL_KEY_UNLOCK_W | 
-        GPTIMER_RSTCTL_RESETSTKYCLR_CLR | GPTIMER_RSTCTL_RESETASSERT_ASSERT);
+  TIMA0->GPRCM.RSTCTL =
+      (GPTIMER_RSTCTL_KEY_UNLOCK_W | GPTIMER_RSTCTL_RESETSTKYCLR_CLR |
+       GPTIMER_RSTCTL_RESETASSERT_ASSERT);
 
   // Enable power to TIMA0
-  TIMA0->GPRCM.PWREN = (GPTIMER_PWREN_KEY_UNLOCK_W | 
-        GPTIMER_PWREN_ENABLE_ENABLE);
+  TIMA0->GPRCM.PWREN =
+      (GPTIMER_PWREN_KEY_UNLOCK_W | GPTIMER_PWREN_ENABLE_ENABLE);
 
   clock_delay(24);
 
-  TIMA0->CLKSEL = (GPTIMER_CLKSEL_BUSCLK_SEL_ENABLE | 
-        GPTIMER_CLKSEL_MFCLK_SEL_DISABLE | GPTIMER_CLKSEL_LFCLK_SEL_DISABLE);
+  TIMA0->CLKSEL =
+      (GPTIMER_CLKSEL_BUSCLK_SEL_ENABLE | GPTIMER_CLKSEL_MFCLK_SEL_DISABLE |
+       GPTIMER_CLKSEL_LFCLK_SEL_DISABLE);
 
   TIMA0->CLKDIV = GPTIMER_CLKDIV_RATIO_DIV_BY_8;
 
@@ -255,12 +255,13 @@ void TIMA0_C0_pwm_init(uint32_t load_value, uint32_t compare_value)
   // 200,000 Hz = 40,000,000 Hz / (8 * (24 + 1))
   TIMA0->COMMONREGS.CPS = GPTIMER_CPS_PCNT_MASK & 0x18;
 
-  // Set C3 action for compare 
+  // Set C3 action for compare
   // On Zero, set output HIGH; On Compares up, set output LOW
-  TIMA0->COUNTERREGS.CCACT_01[0] = (GPTIMER_CCACT_01_FENACT_DISABLED  | 
-        GPTIMER_CCACT_01_CC2UACT_DISABLED | GPTIMER_CCACT_01_CC2DACT_DISABLED |
-        GPTIMER_CCACT_01_CUACT_CCP_LOW | GPTIMER_CCACT_01_CDACT_DISABLED | 
-        GPTIMER_CCACT_01_LACT_DISABLED | GPTIMER_CCACT_01_ZACT_CCP_HIGH);
+  TIMA0->COUNTERREGS.CCACT_01[0] =
+      (GPTIMER_CCACT_01_FENACT_DISABLED | GPTIMER_CCACT_01_CC2UACT_DISABLED |
+       GPTIMER_CCACT_01_CC2DACT_DISABLED | GPTIMER_CCACT_01_CUACT_CCP_LOW |
+       GPTIMER_CCACT_01_CDACT_DISABLED | GPTIMER_CCACT_01_LACT_DISABLED |
+       GPTIMER_CCACT_01_ZACT_CCP_HIGH);
 
   // Set timer reload value
   TIMA0->COUNTERREGS.LOAD = GPTIMER_LOAD_LD_MASK & (load_value - 1);
@@ -269,50 +270,51 @@ void TIMA0_C0_pwm_init(uint32_t load_value, uint32_t compare_value)
   TIMA0->COUNTERREGS.CC_01[0] = GPTIMER_CC_01_CCVAL_MASK & compare_value;
 
   // Set compare control for PWM func with output initially low
-  TIMA0->COUNTERREGS.OCTL_01[0] = (GPTIMER_OCTL_01_CCPIV_LOW | 
-        GPTIMER_OCTL_01_CCPOINV_NOINV | GPTIMER_OCTL_01_CCPO_FUNCVAL);
-  
-  // Set to capture mode with writes to CC register has immediate effect 
-  TIMA0->COUNTERREGS.CCCTL_01[0] = (GPTIMER_CCCTL_01_CCUPD_IMMEDIATELY |
-        GPTIMER_CCCTL_01_COC_COMPARE | 
-        GPTIMER_CCCTL_01_ZCOND_CC_TRIG_NO_EFFECT |
-        GPTIMER_CCCTL_01_LCOND_CC_TRIG_NO_EFFECT |
-        GPTIMER_CCCTL_01_ACOND_TIMCLK | GPTIMER_CCCTL_01_CCOND_NOCAPTURE);
+  TIMA0->COUNTERREGS.OCTL_01[0] =
+      (GPTIMER_OCTL_01_CCPIV_LOW | GPTIMER_OCTL_01_CCPOINV_NOINV |
+       GPTIMER_OCTL_01_CCPO_FUNCVAL);
+
+  // Set to capture mode with writes to CC register has immediate effect
+  TIMA0->COUNTERREGS.CCCTL_01[0] =
+      (GPTIMER_CCCTL_01_CCUPD_IMMEDIATELY | GPTIMER_CCCTL_01_COC_COMPARE |
+       GPTIMER_CCCTL_01_ZCOND_CC_TRIG_NO_EFFECT |
+       GPTIMER_CCCTL_01_LCOND_CC_TRIG_NO_EFFECT |
+       GPTIMER_CCCTL_01_ACOND_TIMCLK | GPTIMER_CCCTL_01_CCOND_NOCAPTURE);
 
   // When enabled counter is 0, set counter counts up
-  TIMA0->COUNTERREGS.CTRCTL = (GPTIMER_CTRCTL_CVAE_ZEROVAL | 
-        GPTIMER_CTRCTL_PLEN_DISABLED | GPTIMER_CTRCTL_SLZERCNEZ_DISABLED |
-        GPTIMER_CTRCTL_CM_UP | GPTIMER_CTRCTL_REPEAT_REPEAT_1);
+  TIMA0->COUNTERREGS.CTRCTL =
+      (GPTIMER_CTRCTL_CVAE_ZEROVAL | GPTIMER_CTRCTL_PLEN_DISABLED |
+       GPTIMER_CTRCTL_SLZERCNEZ_DISABLED | GPTIMER_CTRCTL_CM_UP |
+       GPTIMER_CTRCTL_REPEAT_REPEAT_1);
 
   // Enable the clock
   TIMA0->COMMONREGS.CCLKCTL = GPTIMER_CCLKCTL_CLKEN_ENABLED;
 
   // No interrupt is required
-  TIMA0->CPU_INT.IMASK = (GPTIMER_CPU_INT_IMASK_Z_CLR | 
-        GPTIMER_CPU_INT_IMASK_L_CLR | GPTIMER_CPU_INT_IMASK_CCD0_CLR |
-        GPTIMER_CPU_INT_IMASK_CCD1_CLR | GPTIMER_CPU_INT_IMASK_CCU0_CLR |
-        GPTIMER_CPU_INT_IMASK_CCU1_CLR | GPTIMER_CPU_INT_IMASK_F_CLR |
-        GPTIMER_CPU_INT_IMASK_TOV_CLR | GPTIMER_CPU_INT_IMASK_DC_CLR | 
-        GPTIMER_CPU_INT_IMASK_QEIERR_CLR | GPTIMER_CPU_INT_IMASK_CCD2_CLR |
-        GPTIMER_CPU_INT_IMASK_CCD3_CLR | GPTIMER_CPU_INT_IMASK_CCU2_CLR |
-        GPTIMER_CPU_INT_IMASK_CCU3_CLR | GPTIMER_CPU_INT_IMASK_CCD4_CLR |
-        GPTIMER_CPU_INT_IMASK_CCD5_CLR | GPTIMER_CPU_INT_IMASK_CCU4_CLR |
-        GPTIMER_CPU_INT_IMASK_CCU5_CLR | GPTIMER_CPU_INT_IMASK_REPC_CLR);
+  TIMA0->CPU_INT.IMASK =
+      (GPTIMER_CPU_INT_IMASK_Z_CLR | GPTIMER_CPU_INT_IMASK_L_CLR |
+       GPTIMER_CPU_INT_IMASK_CCD0_CLR | GPTIMER_CPU_INT_IMASK_CCD1_CLR |
+       GPTIMER_CPU_INT_IMASK_CCU0_CLR | GPTIMER_CPU_INT_IMASK_CCU1_CLR |
+       GPTIMER_CPU_INT_IMASK_F_CLR | GPTIMER_CPU_INT_IMASK_TOV_CLR |
+       GPTIMER_CPU_INT_IMASK_DC_CLR | GPTIMER_CPU_INT_IMASK_QEIERR_CLR |
+       GPTIMER_CPU_INT_IMASK_CCD2_CLR | GPTIMER_CPU_INT_IMASK_CCD3_CLR |
+       GPTIMER_CPU_INT_IMASK_CCU2_CLR | GPTIMER_CPU_INT_IMASK_CCU3_CLR |
+       GPTIMER_CPU_INT_IMASK_CCD4_CLR | GPTIMER_CPU_INT_IMASK_CCD5_CLR |
+       GPTIMER_CPU_INT_IMASK_CCU4_CLR | GPTIMER_CPU_INT_IMASK_CCU5_CLR |
+       GPTIMER_CPU_INT_IMASK_REPC_CLR);
 
   // Set TIMA0_C0 as output
-  TIMA0->COMMONREGS.CCPD =(GPTIMER_CCPD_C0CCP0_OUTPUT | 
-         GPTIMER_CCPD_C0CCP2_INPUT | GPTIMER_CCPD_C0CCP1_INPUT |  
-         GPTIMER_CCPD_C0CCP0_INPUT);
+  TIMA0->COMMONREGS.CCPD =
+      (GPTIMER_CCPD_C0CCP0_OUTPUT | GPTIMER_CCPD_C0CCP2_INPUT |
+       GPTIMER_CCPD_C0CCP1_INPUT | GPTIMER_CCPD_C0CCP0_INPUT);
 
 } /* TIMA0_C0_pwm_init */
 
-void TIMA0_C0_pwm_enable(void)
-{
-    TIMA0->COUNTERREGS.CTRCTL |= (GPTIMER_CTRCTL_EN_ENABLED);
+void TIMA0_C0_pwm_enable(void) {
+  TIMA0->COUNTERREGS.CTRCTL |= (GPTIMER_CTRCTL_EN_ENABLED);
 } /*TIMA0_C0_pwm_enable */
 
-void TIMA0_C0_set_pwm_dc(uint8_t duty_cycle)
-{
+void TIMA0_C0_set_pwm_dc(uint8_t duty_cycle) {
   uint32_t threshold = (TIMA0->COUNTERREGS.LOAD * duty_cycle) / 100;
 
   TIMA0->COUNTERREGS.CC_01[0] = GPTIMER_CC_01_CCVAL_MASK & threshold;

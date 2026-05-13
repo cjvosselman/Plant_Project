@@ -30,21 +30,20 @@ void display_soil(uint16_t adc_reading)
   uint16_t moisture_level = adc_reading; 
   uint16_t moisture_value = (moisture_level/soil_step_size);
 
-   lcd_set_ddram_addr(LCD_LINE1_ADDR);
+   lcd_set_ddram_addr(LCD_LINE2_ADDR);
 
     if (moisture_level < dry_soil_value) 
     {
-      lcd_write_string("Status: Soil Wet");
+      lcd_write_string("Status = Wet");
     } 
     else if (moisture_level > dry_soil_value) 
     {
-      lcd_write_string("Status: Soil Dry");
+      lcd_write_string("Status = Dry");
     }
 
-    lcd_write_string("ADC:");
-
-    lcd_set_ddram_addr(LCD_LINE2_ADDR);
-
+    lcd_set_ddram_addr(LCD_LINE1_ADDR);
+    lcd_write_string("ADC = ");
+    lcd_set_ddram_addr(LCD_LINE1_ADDR + LCD_CHAR_POSITION_8);
     lcd_write_doublebyte(moisture_level);
 }
 

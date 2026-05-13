@@ -111,9 +111,9 @@ int main(void) {
   lcd1602_init();
   UART_init(115200);
   seg7_init();
-  timerA_config(LOAD_VALUE, COMPARE_VALUE);
-  timerA_enable_interrupt();
-  timerA_enable();
+  TIMG8_config(LOAD_VALUE, COMPARE_VALUE);
+  TIMG8_enable_interrupt();
+  TIMG8_enable();
   ADC0_init(ADC12_MEMCTL_VRSEL_VDDA_VSSA);
   ADC1_init(ADC12_MEMCTL_VRSEL_INTREF_VSSA);
 
