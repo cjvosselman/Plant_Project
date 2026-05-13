@@ -1,17 +1,17 @@
 ******************************************************************************
             TI ARM Clang Linker PC v4.0.0                      
 ******************************************************************************
->> Linked Tue May 12 10:21:40 2026
+>> Linked Tue May 12 14:10:32 2026
 
 OUTPUT FILE NAME:   <Final_Project.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00001b05
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00001d65
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00020000  00001df8  0001e208  R  X
+  FLASH                 00000000   00020000  00002108  0001def8  R  X
   SRAM                  20200000   00008000  00000a0a  000075f6  RW X
   BCR_CONFIG            41c00000   00000080  00000000  00000080  R   
   BSL_CONFIG            41c00100   00000080  00000000  00000080  R   
@@ -21,11 +21,11 @@ SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    00001df8   00001df8    r-x
+00000000    00000000    00002108   00002108    r-x
   00000000    00000000    000000c0   000000c0    r-- .intvecs
-  000000c0    000000c0    00001be0   00001be0    r-x .text
-  00001ca0    00001ca0    00000138   00000138    r-- .rodata
-  00001dd8    00001dd8    00000020   00000020    r-- .cinit
+  000000c0    000000c0    00001e80   00001e80    r-x .text
+  00001f40    00001f40    000001a8   000001a8    r-- .rodata
+  000020e8    000020e8    00000020   00000020    r-- .cinit
 20200000    20200000    0000080a   00000000    rw-
   20200000    20200000    00000800   00000000    rw- .sysmem
   20200800    20200800    0000000a   00000000    rw- .data
@@ -41,97 +41,112 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    000000c0     
                   00000000    000000c0     startup_mspm0g3507_ticlang.o (.intvecs)
 
-.text      0    000000c0    00001be0     
-                  000000c0    000001a8     Light_sensor_main.o (.text.light_read_display)
-                  00000268    00000192     libclang_rt.builtins.a : adddf3.S.obj (.text.adddf3_subdf3)
-                  000003fa    00000002                            : aeabi_div0.c.obj (.text.__aeabi_idiv0)
-                  000003fc    00000180     LaunchPad.o (.text.leds_on)
-                  0000057c    00000170     clock.o (.text.clock_init_40mhz)
-                  000006ec    00000150     LaunchPad.o (.text.I2C_mstr_send_internal)
-                  0000083c    0000011c     lcd1602.o (.text.lcd1602_write)
-                  00000958    0000010c     LaunchPad.o (.text.seg7_init)
-                  00000a64    000000f8     Final_project_main.o (.text.run_monitoring_system)
-                  00000b5c    000000e0     timer.o (.text.TIMG8_IRQHandler)
-                  00000c3c    000000d4     adc.o (.text.ADC0_init)
-                  00000d10    000000d4     adc.o (.text.ADC1_init)
-                  00000de4    000000d4     uart.o (.text.UART_init)
-                  00000eb8    000000d0     LaunchPad.o (.text.leds_off)
-                  00000f88    000000c0     lcd1602.o (.text.lcd1602_init)
-                  00001048    000000bc     LaunchPad.o (.text.I2C_mstr_init)
-                  00001104    000000ac     timer.o (.text.TIMA0_C0_pwm_init)
-                  000011b0    00000094     timer.o (.text.timerA_config)
-                  00001244    00000090     soil_sensor_main.o (.text.read_display_soil)
-                  000012d4    0000008c     Final_project_main.o (.text.GROUP1_IRQHandler)
-                  00001360    00000084     Final_project_main.o (.text.__NVIC_SetPriority)
-                  000013e4    00000084     timer.o (.text.__NVIC_SetPriority)
-                  00001468    0000007c     lcd1602.o (.text.doublebyte_to_ascii)
-                  000014e4    0000007c     libc.a : copy_decompress_lzss.c.obj (.text:decompress:lzss)
-                  00001560    00000074     LaunchPad.o (.text.seg7_off)
-                  000015d4    00000070     Final_project_main.o (.text.main)
-                  00001644    00000068     adc.o (.text.ADC0_in)
-                  000016ac    00000068     adc.o (.text.ADC1_in)
-                  00001714    0000005c     LaunchPad.o (.text.I2C_fill_tx_fifo)
-                  00001770    00000058     LaunchPad.o (.text.seg7_dig_enable)
-                  000017c8    0000004c     LaunchPad.o (.text.dipsw_init)
-                  00001814    00000042     libclang_rt.builtins.a : fixunsdfsi.S.obj (.text.__fixunsdfsi)
-                  00001856    00000002     --HOLE-- [fill = 0]
-                  00001858    00000040                            : aeabi_uidivmod.S.obj (.text.__aeabi_uidivmod)
-                  00001898    00000040     LaunchPad.o (.text.seg7_hex)
-                  000018d8    0000003c     clock.o (.text.usec_delay)
-                  00001914    0000003c     libc.a : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit)
-                  00001950    00000038     LaunchPad.o (.text.launchpad_gpio_init)
-                  00001988    00000034     Final_project_main.o (.text.config_pb1_interrupt)
-                  000019bc    00000034     Final_project_main.o (.text.config_pb2_interrupt)
-                  000019f0    00000034     clock.o (.text.msec_delay)
-                  00001a24    00000030     timer.o (.text.timerA_enable_interrupt)
-                  00001a54    0000002c     timer.o (.text.TIMA0_C0_set_pwm_dc)
-                  00001a80    0000002c     Final_project_main.o (.text.__NVIC_EnableIRQ)
-                  00001aac    0000002c     timer.o (.text.__NVIC_EnableIRQ)
-                  00001ad8    0000002c     lcd1602.o (.text.lcd_write_doublebyte)
-                  00001b04    00000028     libc.a : boot_cortex_m.c.obj (.text:_c_int00_noargs)
-                  00001b2c    00000026     LaunchPad.o (.text.seg7_on)
-                  00001b52    00000002     --HOLE-- [fill = 0]
-                  00001b54    00000024     libclang_rt.builtins.a : floatunsidf.S.obj (.text.__floatunsidf)
-                  00001b78    00000024     lcd1602.o (.text.lcd_write_string)
-                  00001b9c    00000020     lcd1602.o (.text.lcd_set_backlight_on)
-                  00001bbc    00000020     lcd1602.o (.text.lcd_set_ddram_addr)
-                  00001bdc    0000001e     LaunchPad.o (.text.I2C_mstr_send1)
-                  00001bfa    00000018     lcd1602.o (.text.lcd_write_char)
-                  00001c12    00000012     libc.a : memcpy16.S.obj (.text:TI_memcpy_small)
-                  00001c24    00000012            : copy_decompress_none.c.obj (.text:decompress:none)
-                  00001c36    00000002     --HOLE-- [fill = 0]
-                  00001c38    00000010     timer.o (.text.TIMA0_C0_pwm_enable)
-                  00001c48    00000010     clock.o (.text.clock_delay)
-                  00001c58    00000010     timer.o (.text.timerA_enable)
-                  00001c68    0000000c     timer.o (.text.TIMA0_C0_init)
-                  00001c74    0000000c     clock.o (.text.get_bus_clock_freq)
-                  00001c80    00000008     libclang_rt.builtins.a : aeabi_memcpy.S.obj (.text.__aeabi_memcpy)
-                  00001c88    00000004     startup_mspm0g3507_ticlang.o (.text.Default_Handler)
-                  00001c8c    00000004     startup_mspm0g3507_ticlang.o (.text.HardFault_Handler)
-                  00001c90    00000004     startup_mspm0g3507_ticlang.o (.text.Reset_Handler)
-                  00001c94    00000004     libc.a : pre_init.c.obj (.text._system_pre_init)
-                  00001c98    00000004            : exit.c.obj (.text:abort)
-                  00001c9c    00000004     --HOLE-- [fill = 0]
+.text      0    000000c0    00001e80     
+                  000000c0    00000192     libclang_rt.builtins.a : adddf3.S.obj (.text.adddf3_subdf3)
+                  00000252    00000002                            : aeabi_div0.c.obj (.text.__aeabi_idiv0)
+                  00000254    00000188     Final_project_mainOld.o (.text.run_monitoring_system)
+                  000003dc    00000170     clock.o (.text.clock_init_40mhz)
+                  0000054c    00000150     LaunchPad.o (.text.I2C_mstr_send_internal)
+                  0000069c    0000011c     lcd1602.o (.text.lcd1602_write)
+                  000007b8    0000010c     light_sensor.o (.text.light_correction)
+                  000008c4    0000010c     LaunchPad.o (.text.seg7_init)
+                  000009d0    000000e0     timer.o (.text.TIMG8_IRQHandler)
+                  00000ab0    000000d4     adc.o (.text.ADC0_init)
+                  00000b84    000000d4     adc.o (.text.ADC1_init)
+                  00000c58    000000d4     uart.o (.text.UART_init)
+                  00000d2c    000000d0     LaunchPad.o (.text.leds_off)
+                  00000dfc    000000c0     lcd1602.o (.text.lcd1602_init)
+                  00000ebc    000000bc     LaunchPad.o (.text.I2C_mstr_init)
+                  00000f78    000000b4     LaunchPad.o (.text.lp_leds_off)
+                  0000102c    000000b4     LaunchPad.o (.text.lp_leds_on)
+                  000010e0    000000b0     LaunchPad.o (.text.motor0_pwm_init)
+                  00001190    000000ac     timer.o (.text.TIMA0_C0_pwm_init)
+                  0000123c    000000a8     LaunchPad.o (.text.lp_leds_init)
+                  000012e4    00000094     timer.o (.text.timerA_config)
+                  00001378    00000090     light_sensor.o (.text.light_display)
+                  00001408    0000008c     Final_project_mainOld.o (.text.GROUP1_IRQHandler)
+                  00001494    00000084     Final_project_mainOld.o (.text.__NVIC_SetPriority)
+                  00001518    00000084     timer.o (.text.__NVIC_SetPriority)
+                  0000159c    00000084     soil_sensor.o (.text.display_soil)
+                  00001620    0000007c     lcd1602.o (.text.doublebyte_to_ascii)
+                  0000169c    0000007c     libc.a : copy_decompress_lzss.c.obj (.text:decompress:lzss)
+                  00001718    00000074     Final_project_mainOld.o (.text.main)
+                  0000178c    00000074     LaunchPad.o (.text.seg7_off)
+                  00001800    00000068     adc.o (.text.ADC0_in)
+                  00001868    00000068     adc.o (.text.ADC1_in)
+                  000018d0    00000064     Final_project_mainOld.o (.text.watering_system)
+                  00001934    0000005c     LaunchPad.o (.text.I2C_fill_tx_fifo)
+                  00001990    00000050     light_sensor.o (.text.light_read)
+                  000019e0    00000050     Final_project_mainOld.o (.text.water_plant)
+                  00001a30    0000004c     LaunchPad.o (.text.dipsw_init)
+                  00001a7c    00000042     libclang_rt.builtins.a : fixunsdfsi.S.obj (.text.__fixunsdfsi)
+                  00001abe    00000002     --HOLE-- [fill = 0]
+                  00001ac0    00000040                            : aeabi_uidivmod.S.obj (.text.__aeabi_uidivmod)
+                  00001b00    0000003c     clock.o (.text.usec_delay)
+                  00001b3c    0000003c     libc.a : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit)
+                  00001b78    00000038     Final_project_mainOld.o (.text.interrupt_buzz)
+                  00001bb0    00000038     LaunchPad.o (.text.launchpad_gpio_init)
+                  00001be8    00000034     Final_project_mainOld.o (.text.config_pb1_interrupt)
+                  00001c1c    00000034     Final_project_mainOld.o (.text.config_pb2_interrupt)
+                  00001c50    00000034     clock.o (.text.msec_delay)
+                  00001c84    00000030     timer.o (.text.timerA_enable_interrupt)
+                  00001cb4    0000002c     timer.o (.text.TIMA0_C0_set_pwm_dc)
+                  00001ce0    0000002c     Final_project_mainOld.o (.text.__NVIC_EnableIRQ)
+                  00001d0c    0000002c     timer.o (.text.__NVIC_EnableIRQ)
+                  00001d38    0000002c     lcd1602.o (.text.lcd_write_doublebyte)
+                  00001d64    00000028     libc.a : boot_cortex_m.c.obj (.text:_c_int00_noargs)
+                  00001d8c    00000024     libclang_rt.builtins.a : floatunsidf.S.obj (.text.__floatunsidf)
+                  00001db0    00000024     lcd1602.o (.text.lcd_write_string)
+                  00001dd4    00000020     lcd1602.o (.text.lcd_set_backlight_on)
+                  00001df4    00000020     lcd1602.o (.text.lcd_set_ddram_addr)
+                  00001e14    0000001e     LaunchPad.o (.text.I2C_mstr_send1)
+                  00001e32    0000001e     soil_sensor.o (.text.soil_read)
+                  00001e50    00000018     lcd1602.o (.text.lcd_write_char)
+                  00001e68    00000014     LaunchPad.o (.text.motor0_set_pwm_count)
+                  00001e7c    00000012     libc.a : memcpy16.S.obj (.text:TI_memcpy_small)
+                  00001e8e    00000012            : copy_decompress_none.c.obj (.text:decompress:none)
+                  00001ea0    00000010     timer.o (.text.TIMA0_C0_pwm_enable)
+                  00001eb0    00000010     clock.o (.text.clock_delay)
+                  00001ec0    00000010     LaunchPad.o (.text.motor0_pwm_disable)
+                  00001ed0    00000010     LaunchPad.o (.text.motor0_pwm_enable)
+                  00001ee0    00000010     timer.o (.text.timerA_enable)
+                  00001ef0    0000000e     lcd1602.o (.text.lcd_clear)
+                  00001efe    00000002     --HOLE-- [fill = 0]
+                  00001f00    0000000c     timer.o (.text.TIMA0_C0_init)
+                  00001f0c    0000000c     clock.o (.text.get_bus_clock_freq)
+                  00001f18    0000000c     LaunchPad.o (.text.motor0_init)
+                  00001f24    00000008     libclang_rt.builtins.a : aeabi_memcpy.S.obj (.text.__aeabi_memcpy)
+                  00001f2c    00000004     startup_mspm0g3507_ticlang.o (.text.Default_Handler)
+                  00001f30    00000004     startup_mspm0g3507_ticlang.o (.text.HardFault_Handler)
+                  00001f34    00000004     startup_mspm0g3507_ticlang.o (.text.Reset_Handler)
+                  00001f38    00000004     libc.a : pre_init.c.obj (.text._system_pre_init)
+                  00001f3c    00000004            : exit.c.obj (.text:abort)
 
-.cinit     0    00001dd8    00000020     
-                  00001dd8    0000000e     (.cinit..data.load) [load image, compression = lzss]
-                  00001de6    00000002     --HOLE-- [fill = 0]
-                  00001de8    00000008     (__TI_handler_table)
-                  00001df0    00000008     (__TI_cinit_table)
+.cinit     0    000020e8    00000020     
+                  000020e8    0000000e     (.cinit..data.load) [load image, compression = lzss]
+                  000020f6    00000002     --HOLE-- [fill = 0]
+                  000020f8    00000008     (__TI_handler_table)
+                  00002100    00000008     (__TI_cinit_table)
 
-.rodata    0    00001ca0    00000138     
-                  00001ca0    00000060     LaunchPad.o (.rodata.led_config_data)
-                  00001d00    0000003c     LaunchPad.o (.rodata.enable_controls)
-                  00001d3c    00000030     LaunchPad.o (.rodata.dip_switch_config_data)
-                  00001d6c    00000018     LaunchPad.o (.rodata.iic_config_data)
-                  00001d84    00000011     soil_sensor_main.o (.rodata.str1.105825019282255091571)
-                  00001d95    00000011     soil_sensor_main.o (.rodata.str1.118231416012151243891)
-                  00001da6    0000000e     Light_sensor_main.o (.rodata.str1.179046711242373907111)
-                  00001db4    00000008     Light_sensor_main.o (.rodata.str1.4533648082003727731)
-                  00001dbc    00000008     Light_sensor_main.o (.rodata.str1.54964556624778217671)
-                  00001dc4    00000008     Light_sensor_main.o (.rodata.str1.86744439638882013311)
-                  00001dcc    00000005     soil_sensor_main.o (.rodata.str1.119204860698759899861)
-                  00001dd1    00000007     --HOLE-- [fill = 0]
+.rodata    0    00001f40    000001a8     
+                  00001f40    00000060     LaunchPad.o (.rodata.led_config_data)
+                  00001fa0    0000003c     LaunchPad.o (.rodata.enable_controls)
+                  00001fdc    00000030     LaunchPad.o (.rodata.dip_switch_config_data)
+                  0000200c    00000030     LaunchPad.o (.rodata.lp_led_config_data)
+                  0000203c    00000018     LaunchPad.o (.rodata.iic_config_data)
+                  00002054    00000011     soil_sensor.o (.rodata.str1.107477899473405917431)
+                  00002065    00000011     Final_project_mainOld.o (.rodata.str1.112058084038499506921)
+                  00002076    00000011     Final_project_mainOld.o (.rodata.str1.113360871369163430081)
+                  00002087    00000011     soil_sensor.o (.rodata.str1.157815876255455950781)
+                  00002098    00000011     Final_project_mainOld.o (.rodata.str1.181161276841945686991)
+                  000020a9    0000000f     Final_project_mainOld.o (.rodata.str1.23867714357394470981)
+                  000020b8    0000000a     Final_project_mainOld.o (.rodata.str1.139312366413868334651)
+                  000020c2    00000008     light_sensor.o (.rodata.str1.169528452958725161131)
+                  000020ca    00000008     light_sensor.o (.rodata.str1.37588485510668260261)
+                  000020d2    00000008     light_sensor.o (.rodata.str1.85769062010376098981)
+                  000020da    00000007     Final_project_mainOld.o (.rodata.str1.117895495510453279361)
+                  000020e1    00000005     soil_sensor.o (.rodata.str1.19066637801956105941)
+                  000020e6    00000002     --HOLE-- [fill = 0]
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
@@ -141,9 +156,9 @@ section   page    origin      length       input sections
 .data      0    20200800    0000000a     UNINITIALIZED
                   20200800    00000004     clock.o (.data.g_bus_clock_freq)
                   20200804    00000001     lcd1602.o (.data.g_lcd_backlight_mode)
-                  20200805    00000001     Final_project_main.o (.data.g_pb1_pressed)
-                  20200806    00000001     Final_project_main.o (.data.g_pb2_pressed)
-                  20200807    00000001     Light_sensor_main.o (.data.light_read_display.increment)
+                  20200805    00000001     Final_project_mainOld.o (.data.g_pb1_pressed)
+                  20200806    00000001     Final_project_mainOld.o (.data.g_pb2_pressed)
+                  20200807    00000001     light_sensor.o (.data.light_correction.increment)
                   20200808    00000001     timer.o (.data.ones_seconds)
                   20200809    00000001     timer.o (.data.tens_seconds)
 
@@ -166,17 +181,17 @@ MODULE SUMMARY
        Module                         code   ro data   rw data
        ------                         ----   -------   -------
     .\
-       LaunchPad.o                    1944   228       0      
+       LaunchPad.o                    2138   276       0      
+       Final_project_mainOld.o        1164   83        2      
        timer.o                        856    0         2      
-       Final_project_main.o           780    0         2      
-       lcd1602.o                      768    0         1      
+       lcd1602.o                      782    0         1      
        adc.o                          632    0         0      
+       light_sensor.o                 492    24        1      
        clock.o                        508    0         4      
-       Light_sensor_main.o            424    38        1      
        uart.o                         212    0         0      
-       soil_sensor_main.o             144    39        0      
+       soil_sensor.o                  162    39        0      
     +--+------------------------------+------+---------+---------+
-       Total:                         6268   305       10     
+       Total:                         6946   422       10     
                                                               
     .\ticlang\
        startup_mspm0g3507_ticlang.o   12     192       0      
@@ -208,18 +223,18 @@ MODULE SUMMARY
        Stack:                         0      0         512    
        Linker Generated:              0      30        0      
     +--+------------------------------+------+---------+---------+
-       Grand Total:                   7126   527       2570   
+       Grand Total:                   7804   644       2570   
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00001df0 records: 1, size/record: 8, table size: 8
-	.data: load addr=00001dd8, load size=0000000e bytes, run addr=20200800, run size=0000000a bytes, compression=lzss
+__TI_cinit_table @ 00002100 records: 1, size/record: 8, table size: 8
+	.data: load addr=000020e8, load size=0000000e bytes, run addr=20200800, run size=0000000a bytes, compression=lzss
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00001de8 records: 2, size/record: 4, table size: 8
+__TI_handler_table @ 000020f8 records: 2, size/record: 4, table size: 8
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 
@@ -228,50 +243,50 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                          
 -------   ----                          
-00001c89  ADC0_IRQHandler               
-00001645  ADC0_in                       
-00000c3d  ADC0_init                     
-00001c89  ADC1_IRQHandler               
-000016ad  ADC1_in                       
-00000d11  ADC1_init                     
-00001c89  AES_IRQHandler                
-00001c98  C$$EXIT                       
-00001c89  CANFD0_IRQHandler             
-00001c89  DAC0_IRQHandler               
-00001c89  DMA_IRQHandler                
-00001c89  Default_Handler               
-00001c89  GROUP0_IRQHandler             
-000012d5  GROUP1_IRQHandler             
-00001c8d  HardFault_Handler             
-00001c89  I2C0_IRQHandler               
-00001c89  I2C1_IRQHandler               
-00001049  I2C_mstr_init                 
-00001bdd  I2C_mstr_send1                
-00001c89  NMI_Handler                   
-00001c89  PendSV_Handler                
-00001c89  RTC_IRQHandler                
-00001c91  Reset_Handler                 
-00001c89  SPI0_IRQHandler               
-00001c89  SPI1_IRQHandler               
-00001c89  SVC_Handler                   
-00001c89  SysTick_Handler               
-00001c69  TIMA0_C0_init                 
-00001c39  TIMA0_C0_pwm_enable           
-00001105  TIMA0_C0_pwm_init             
-00001a55  TIMA0_C0_set_pwm_dc           
-00001c89  TIMA0_IRQHandler              
-00001c89  TIMA1_IRQHandler              
-00001c89  TIMG0_IRQHandler              
-00001c89  TIMG12_IRQHandler             
-00001c89  TIMG6_IRQHandler              
-00001c89  TIMG7_IRQHandler              
-00000b5d  TIMG8_IRQHandler              
-00001c13  TI_memcpy_small               
-00001c89  UART0_IRQHandler              
-00001c89  UART1_IRQHandler              
-00001c89  UART2_IRQHandler              
-00001c89  UART3_IRQHandler              
-00000de5  UART_init                     
+00001f2d  ADC0_IRQHandler               
+00001801  ADC0_in                       
+00000ab1  ADC0_init                     
+00001f2d  ADC1_IRQHandler               
+00001869  ADC1_in                       
+00000b85  ADC1_init                     
+00001f2d  AES_IRQHandler                
+00001f3c  C$$EXIT                       
+00001f2d  CANFD0_IRQHandler             
+00001f2d  DAC0_IRQHandler               
+00001f2d  DMA_IRQHandler                
+00001f2d  Default_Handler               
+00001f2d  GROUP0_IRQHandler             
+00001409  GROUP1_IRQHandler             
+00001f31  HardFault_Handler             
+00001f2d  I2C0_IRQHandler               
+00001f2d  I2C1_IRQHandler               
+00000ebd  I2C_mstr_init                 
+00001e15  I2C_mstr_send1                
+00001f2d  NMI_Handler                   
+00001f2d  PendSV_Handler                
+00001f2d  RTC_IRQHandler                
+00001f35  Reset_Handler                 
+00001f2d  SPI0_IRQHandler               
+00001f2d  SPI1_IRQHandler               
+00001f2d  SVC_Handler                   
+00001f2d  SysTick_Handler               
+00001f01  TIMA0_C0_init                 
+00001ea1  TIMA0_C0_pwm_enable           
+00001191  TIMA0_C0_pwm_init             
+00001cb5  TIMA0_C0_set_pwm_dc           
+00001f2d  TIMA0_IRQHandler              
+00001f2d  TIMA1_IRQHandler              
+00001f2d  TIMG0_IRQHandler              
+00001f2d  TIMG12_IRQHandler             
+00001f2d  TIMG6_IRQHandler              
+00001f2d  TIMG7_IRQHandler              
+000009d1  TIMG8_IRQHandler              
+00001e7d  TI_memcpy_small               
+00001f2d  UART0_IRQHandler              
+00001f2d  UART1_IRQHandler              
+00001f2d  UART2_IRQHandler              
+00001f2d  UART3_IRQHandler              
+00000c59  UART_init                     
 20208000  __STACK_END                   
 00000200  __STACK_SIZE                  
 00000800  __SYSMEM_SIZE                 
@@ -284,86 +299,98 @@ address   name
 00000000  __TI_ATRegion2_region_sz      
 00000000  __TI_ATRegion2_src_addr       
 00000000  __TI_ATRegion2_trg_addr       
-00001df0  __TI_CINIT_Base               
-00001df8  __TI_CINIT_Limit              
-00001df8  __TI_CINIT_Warm               
-00001de8  __TI_Handler_Table_Base       
-00001df0  __TI_Handler_Table_Limit      
-00001915  __TI_auto_init_nobinit_nopinit
-000014e5  __TI_decompress_lzss          
-00001c25  __TI_decompress_none          
+00002100  __TI_CINIT_Base               
+00002108  __TI_CINIT_Limit              
+00002108  __TI_CINIT_Warm               
+000020f8  __TI_Handler_Table_Base       
+00002100  __TI_Handler_Table_Limit      
+00001b3d  __TI_auto_init_nobinit_nopinit
+0000169d  __TI_decompress_lzss          
+00001e8f  __TI_decompress_none          
 ffffffff  __TI_pprof_out_hndl           
 ffffffff  __TI_prof_data_size           
 ffffffff  __TI_prof_data_start          
 00000000  __TI_static_base__            
-00000273  __adddf3                      
-00001815  __aeabi_d2uiz                 
-00000273  __aeabi_dadd                  
-00000269  __aeabi_dsub                  
-000003fb  __aeabi_idiv0                 
-00001c81  __aeabi_memcpy                
-00001c81  __aeabi_memcpy4               
-00001c81  __aeabi_memcpy8               
-00001b55  __aeabi_ui2d                  
-00001859  __aeabi_uidiv                 
-00001859  __aeabi_uidivmod              
+000000cb  __adddf3                      
+00001a7d  __aeabi_d2uiz                 
+000000cb  __aeabi_dadd                  
+000000c1  __aeabi_dsub                  
+00000253  __aeabi_idiv0                 
+00001f25  __aeabi_memcpy                
+00001f25  __aeabi_memcpy4               
+00001f25  __aeabi_memcpy8               
+00001d8d  __aeabi_ui2d                  
+00001ac1  __aeabi_uidiv                 
+00001ac1  __aeabi_uidivmod              
 ffffffff  __binit__                     
-00001815  __fixunsdfsi                  
-00001b55  __floatunsidf                 
+00001a7d  __fixunsdfsi                  
+00001d8d  __floatunsidf                 
 UNDEFED   __mpu_init                    
 20207e00  __stack                       
 20200000  __start___llvm_prf_bits       
 20200000  __start___llvm_prf_cnts       
 20200000  __stop___llvm_prf_bits        
 20200000  __stop___llvm_prf_cnts        
-00000269  __subdf3                      
-00001b05  _c_int00_noargs               
+000000c1  __subdf3                      
+00001d65  _c_int00_noargs               
 20200000  _sys_memory                   
 UNDEFED   _system_post_cinit            
-00001c95  _system_pre_init              
-00001c99  abort                         
+00001f39  _system_pre_init              
+00001f3d  abort                         
 ffffffff  binit                         
-00001c49  clock_delay                   
-0000057d  clock_init_40mhz              
-00001989  config_pb1_interrupt          
-000019bd  config_pb2_interrupt          
-00001d3c  dip_switch_config_data        
-000017c9  dipsw_init                    
-00001469  doublebyte_to_ascii           
-00001d00  enable_controls               
+00001eb1  clock_delay                   
+000003dd  clock_init_40mhz              
+00001be9  config_pb1_interrupt          
+00001c1d  config_pb2_interrupt          
+00001fdc  dip_switch_config_data        
+00001a31  dipsw_init                    
+0000159d  display_soil                  
+00001621  doublebyte_to_ascii           
+00001fa0  enable_controls               
 20200800  g_bus_clock_freq              
 20200805  g_pb1_pressed                 
 20200806  g_pb2_pressed                 
-00001c75  get_bus_clock_freq            
-00001d6c  iic_config_data               
+00001f0d  get_bus_clock_freq            
+0000203c  iic_config_data               
 00000000  interruptVectors              
-00001951  launchpad_gpio_init           
-00000f89  lcd1602_init                  
-0000083d  lcd1602_write                 
-00001b9d  lcd_set_backlight_on          
-00001bbd  lcd_set_ddram_addr            
-00001bfb  lcd_write_char                
-00001ad9  lcd_write_doublebyte          
-00001b79  lcd_write_string              
-00001ca0  led_config_data               
-00000eb9  leds_off                      
-000003fd  leds_on                       
-000000c1  light_read_display            
-000015d5  main                          
-000019f1  msec_delay                    
+00001b79  interrupt_buzz                
+00001bb1  launchpad_gpio_init           
+00000dfd  lcd1602_init                  
+0000069d  lcd1602_write                 
+00001ef1  lcd_clear                     
+00001dd5  lcd_set_backlight_on          
+00001df5  lcd_set_ddram_addr            
+00001e51  lcd_write_char                
+00001d39  lcd_write_doublebyte          
+00001db1  lcd_write_string              
+00001f40  led_config_data               
+00000d2d  leds_off                      
+000007b9  light_correction              
+00001379  light_display                 
+00001991  light_read                    
+0000200c  lp_led_config_data            
+0000123d  lp_leds_init                  
+00000f79  lp_leds_off                   
+0000102d  lp_leds_on                    
+00001719  main                          
+00001f19  motor0_init                   
+00001ec1  motor0_pwm_disable            
+00001ed1  motor0_pwm_enable             
+000010e1  motor0_pwm_init               
+00001e69  motor0_set_pwm_count          
+00001c51  msec_delay                    
 20200808  ones_seconds                  
-00001245  read_display_soil             
-00000a65  run_monitoring_system         
-00001771  seg7_dig_enable               
-00001899  seg7_hex                      
-00000959  seg7_init                     
-00001561  seg7_off                      
-00001b2d  seg7_on                       
+00000255  run_monitoring_system         
+000008c5  seg7_init                     
+0000178d  seg7_off                      
+00001e33  soil_read                     
 20200809  tens_seconds                  
-000011b1  timerA_config                 
-00001c59  timerA_enable                 
-00001a25  timerA_enable_interrupt       
-000018d9  usec_delay                    
+000012e5  timerA_config                 
+00001ee1  timerA_enable                 
+00001c85  timerA_enable_interrupt       
+00001b01  usec_delay                    
+000019e1  water_plant                   
+000018d1  watering_system               
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -381,112 +408,124 @@ address   name
 00000000  __TI_ATRegion2_trg_addr       
 00000000  __TI_static_base__            
 00000000  interruptVectors              
-000000c1  light_read_display            
+000000c1  __aeabi_dsub                  
+000000c1  __subdf3                      
+000000cb  __adddf3                      
+000000cb  __aeabi_dadd                  
 00000200  __STACK_SIZE                  
-00000269  __aeabi_dsub                  
-00000269  __subdf3                      
-00000273  __adddf3                      
-00000273  __aeabi_dadd                  
-000003fb  __aeabi_idiv0                 
-000003fd  leds_on                       
-0000057d  clock_init_40mhz              
+00000253  __aeabi_idiv0                 
+00000255  run_monitoring_system         
+000003dd  clock_init_40mhz              
+0000069d  lcd1602_write                 
+000007b9  light_correction              
 00000800  __SYSMEM_SIZE                 
-0000083d  lcd1602_write                 
-00000959  seg7_init                     
-00000a65  run_monitoring_system         
-00000b5d  TIMG8_IRQHandler              
-00000c3d  ADC0_init                     
-00000d11  ADC1_init                     
-00000de5  UART_init                     
-00000eb9  leds_off                      
-00000f89  lcd1602_init                  
-00001049  I2C_mstr_init                 
-00001105  TIMA0_C0_pwm_init             
-000011b1  timerA_config                 
-00001245  read_display_soil             
-000012d5  GROUP1_IRQHandler             
-00001469  doublebyte_to_ascii           
-000014e5  __TI_decompress_lzss          
-00001561  seg7_off                      
-000015d5  main                          
-00001645  ADC0_in                       
-000016ad  ADC1_in                       
-00001771  seg7_dig_enable               
-000017c9  dipsw_init                    
-00001815  __aeabi_d2uiz                 
-00001815  __fixunsdfsi                  
-00001859  __aeabi_uidiv                 
-00001859  __aeabi_uidivmod              
-00001899  seg7_hex                      
-000018d9  usec_delay                    
-00001915  __TI_auto_init_nobinit_nopinit
-00001951  launchpad_gpio_init           
-00001989  config_pb1_interrupt          
-000019bd  config_pb2_interrupt          
-000019f1  msec_delay                    
-00001a25  timerA_enable_interrupt       
-00001a55  TIMA0_C0_set_pwm_dc           
-00001ad9  lcd_write_doublebyte          
-00001b05  _c_int00_noargs               
-00001b2d  seg7_on                       
-00001b55  __aeabi_ui2d                  
-00001b55  __floatunsidf                 
-00001b79  lcd_write_string              
-00001b9d  lcd_set_backlight_on          
-00001bbd  lcd_set_ddram_addr            
-00001bdd  I2C_mstr_send1                
-00001bfb  lcd_write_char                
-00001c13  TI_memcpy_small               
-00001c25  __TI_decompress_none          
-00001c39  TIMA0_C0_pwm_enable           
-00001c49  clock_delay                   
-00001c59  timerA_enable                 
-00001c69  TIMA0_C0_init                 
-00001c75  get_bus_clock_freq            
-00001c81  __aeabi_memcpy                
-00001c81  __aeabi_memcpy4               
-00001c81  __aeabi_memcpy8               
-00001c89  ADC0_IRQHandler               
-00001c89  ADC1_IRQHandler               
-00001c89  AES_IRQHandler                
-00001c89  CANFD0_IRQHandler             
-00001c89  DAC0_IRQHandler               
-00001c89  DMA_IRQHandler                
-00001c89  Default_Handler               
-00001c89  GROUP0_IRQHandler             
-00001c89  I2C0_IRQHandler               
-00001c89  I2C1_IRQHandler               
-00001c89  NMI_Handler                   
-00001c89  PendSV_Handler                
-00001c89  RTC_IRQHandler                
-00001c89  SPI0_IRQHandler               
-00001c89  SPI1_IRQHandler               
-00001c89  SVC_Handler                   
-00001c89  SysTick_Handler               
-00001c89  TIMA0_IRQHandler              
-00001c89  TIMA1_IRQHandler              
-00001c89  TIMG0_IRQHandler              
-00001c89  TIMG12_IRQHandler             
-00001c89  TIMG6_IRQHandler              
-00001c89  TIMG7_IRQHandler              
-00001c89  UART0_IRQHandler              
-00001c89  UART1_IRQHandler              
-00001c89  UART2_IRQHandler              
-00001c89  UART3_IRQHandler              
-00001c8d  HardFault_Handler             
-00001c91  Reset_Handler                 
-00001c95  _system_pre_init              
-00001c98  C$$EXIT                       
-00001c99  abort                         
-00001ca0  led_config_data               
-00001d00  enable_controls               
-00001d3c  dip_switch_config_data        
-00001d6c  iic_config_data               
-00001de8  __TI_Handler_Table_Base       
-00001df0  __TI_CINIT_Base               
-00001df0  __TI_Handler_Table_Limit      
-00001df8  __TI_CINIT_Limit              
-00001df8  __TI_CINIT_Warm               
+000008c5  seg7_init                     
+000009d1  TIMG8_IRQHandler              
+00000ab1  ADC0_init                     
+00000b85  ADC1_init                     
+00000c59  UART_init                     
+00000d2d  leds_off                      
+00000dfd  lcd1602_init                  
+00000ebd  I2C_mstr_init                 
+00000f79  lp_leds_off                   
+0000102d  lp_leds_on                    
+000010e1  motor0_pwm_init               
+00001191  TIMA0_C0_pwm_init             
+0000123d  lp_leds_init                  
+000012e5  timerA_config                 
+00001379  light_display                 
+00001409  GROUP1_IRQHandler             
+0000159d  display_soil                  
+00001621  doublebyte_to_ascii           
+0000169d  __TI_decompress_lzss          
+00001719  main                          
+0000178d  seg7_off                      
+00001801  ADC0_in                       
+00001869  ADC1_in                       
+000018d1  watering_system               
+00001991  light_read                    
+000019e1  water_plant                   
+00001a31  dipsw_init                    
+00001a7d  __aeabi_d2uiz                 
+00001a7d  __fixunsdfsi                  
+00001ac1  __aeabi_uidiv                 
+00001ac1  __aeabi_uidivmod              
+00001b01  usec_delay                    
+00001b3d  __TI_auto_init_nobinit_nopinit
+00001b79  interrupt_buzz                
+00001bb1  launchpad_gpio_init           
+00001be9  config_pb1_interrupt          
+00001c1d  config_pb2_interrupt          
+00001c51  msec_delay                    
+00001c85  timerA_enable_interrupt       
+00001cb5  TIMA0_C0_set_pwm_dc           
+00001d39  lcd_write_doublebyte          
+00001d65  _c_int00_noargs               
+00001d8d  __aeabi_ui2d                  
+00001d8d  __floatunsidf                 
+00001db1  lcd_write_string              
+00001dd5  lcd_set_backlight_on          
+00001df5  lcd_set_ddram_addr            
+00001e15  I2C_mstr_send1                
+00001e33  soil_read                     
+00001e51  lcd_write_char                
+00001e69  motor0_set_pwm_count          
+00001e7d  TI_memcpy_small               
+00001e8f  __TI_decompress_none          
+00001ea1  TIMA0_C0_pwm_enable           
+00001eb1  clock_delay                   
+00001ec1  motor0_pwm_disable            
+00001ed1  motor0_pwm_enable             
+00001ee1  timerA_enable                 
+00001ef1  lcd_clear                     
+00001f01  TIMA0_C0_init                 
+00001f0d  get_bus_clock_freq            
+00001f19  motor0_init                   
+00001f25  __aeabi_memcpy                
+00001f25  __aeabi_memcpy4               
+00001f25  __aeabi_memcpy8               
+00001f2d  ADC0_IRQHandler               
+00001f2d  ADC1_IRQHandler               
+00001f2d  AES_IRQHandler                
+00001f2d  CANFD0_IRQHandler             
+00001f2d  DAC0_IRQHandler               
+00001f2d  DMA_IRQHandler                
+00001f2d  Default_Handler               
+00001f2d  GROUP0_IRQHandler             
+00001f2d  I2C0_IRQHandler               
+00001f2d  I2C1_IRQHandler               
+00001f2d  NMI_Handler                   
+00001f2d  PendSV_Handler                
+00001f2d  RTC_IRQHandler                
+00001f2d  SPI0_IRQHandler               
+00001f2d  SPI1_IRQHandler               
+00001f2d  SVC_Handler                   
+00001f2d  SysTick_Handler               
+00001f2d  TIMA0_IRQHandler              
+00001f2d  TIMA1_IRQHandler              
+00001f2d  TIMG0_IRQHandler              
+00001f2d  TIMG12_IRQHandler             
+00001f2d  TIMG6_IRQHandler              
+00001f2d  TIMG7_IRQHandler              
+00001f2d  UART0_IRQHandler              
+00001f2d  UART1_IRQHandler              
+00001f2d  UART2_IRQHandler              
+00001f2d  UART3_IRQHandler              
+00001f31  HardFault_Handler             
+00001f35  Reset_Handler                 
+00001f39  _system_pre_init              
+00001f3c  C$$EXIT                       
+00001f3d  abort                         
+00001f40  led_config_data               
+00001fa0  enable_controls               
+00001fdc  dip_switch_config_data        
+0000200c  lp_led_config_data            
+0000203c  iic_config_data               
+000020f8  __TI_Handler_Table_Base       
+00002100  __TI_CINIT_Base               
+00002100  __TI_Handler_Table_Limit      
+00002108  __TI_CINIT_Limit              
+00002108  __TI_CINIT_Warm               
 20200000  __start___llvm_prf_bits       
 20200000  __start___llvm_prf_cnts       
 20200000  __stop___llvm_prf_bits        
@@ -507,4 +546,4 @@ ffffffff  binit
 UNDEFED   __mpu_init                    
 UNDEFED   _system_post_cinit            
 
-[136 symbols]
+[148 symbols]

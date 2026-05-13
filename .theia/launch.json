@@ -27,6 +27,33 @@
                 "name": "Final_Project",
                 "resourceId": "/Final_Project/soil_sensor_main.c"
             }
+        },
+        {
+            "name": "Final_Project (3)",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Final_Project",
+                "resourceId": "/Final_Project/soil_sensor_main copy.c"
+            }
+        },
+        {
+            "name": "Final_Project (4)",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Final_Project",
+                "resourceId": "/Final_Project/Light_sensor_main copy.c"
+            }
+        },
+        {
+            "name": "Final_Project (5)",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Final_Project",
+                "resourceId": "/Final_Project/Final_project_mainOld.c"
+            }
         }
     ]
 }

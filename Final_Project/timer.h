@@ -1,3 +1,6 @@
+#ifndef __TIMER_H__
+#define __TIMER_H__
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -24,3 +27,5 @@ void TIMA0_C0_init(void);
 void TIMA0_C0_pwm_init(uint32_t load_value, uint32_t compare_value);
 void TIMA0_C0_pwm_enable(void);
 void TIMA0_C0_set_pwm_dc(uint8_t duty_cycle);
+
+#endif

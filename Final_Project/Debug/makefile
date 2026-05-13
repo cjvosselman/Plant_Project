@@ -10,13 +10,13 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./Final_project_main.o" \
+"./Final_project_mainOld.o" \
 "./LaunchPad.o" \
-"./Light_sensor_main.o" \
 "./adc.o" \
 "./clock.o" \
 "./lcd1602.o" \
-"./soil_sensor_main.o" \
+"./light_sensor.o" \
+"./soil_sensor.o" \
 "./spi.o" \
 "./timer.o" \
 "./uart.o" \
@@ -146,15 +146,15 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 Final_Project.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: Arm Linker'
-	"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/bin/tiarmclang.exe" -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O0 -D__MSPM0G3507__ -gdwarf-3 -Wl,-m"Final_Project.map" -Wl,--heap_size=0x800 -Wl,--stack_size=512 -Wl,-i"C:/ti/mspm0_sdk_2_04_00_06/source" -Wl,-i"C:/Users/Lordg/OneDrive/Desktop/CSC_202-Group-Project_2/Final_Project" -Wl,-i"C:/Users/Lordg/OneDrive/Desktop/CSC_202-Group-Project_2/Final_Project/Debug/syscfg" -Wl,-i"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="Final_Project_linkInfo.xml" -Wl,--rom_model -o "Final_Project.out" $(ORDERED_OBJS)
+	"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/bin/tiarmclang.exe" -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O0 -D__MSPM0G3507__ -gdwarf-3 -Wl,-m"Final_Project.map" -Wl,--heap_size=0x800 -Wl,--stack_size=512 -Wl,-i"C:/ti/mspm0_sdk_2_04_00_06/source" -Wl,-i"C:/Users/Casey J Vosselman/Desktop/Plant_Project/Final_Project" -Wl,-i"C:/Users/Casey J Vosselman/Desktop/Plant_Project/Final_Project/Debug/syscfg" -Wl,-i"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="Final_Project_linkInfo.xml" -Wl,--rom_model -o "Final_Project.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Final_project_main.o" "LaunchPad.o" "Light_sensor_main.o" "adc.o" "clock.o" "lcd1602.o" "soil_sensor_main.o" "spi.o" "timer.o" "uart.o" "ticlang\startup_mspm0g3507_ticlang.o" 
-	-$(RM) "Final_project_main.d" "LaunchPad.d" "Light_sensor_main.d" "adc.d" "clock.d" "lcd1602.d" "soil_sensor_main.d" "spi.d" "timer.d" "uart.d" "ticlang\startup_mspm0g3507_ticlang.d" 
+	-$(RM) "Final_project_mainOld.o" "LaunchPad.o" "adc.o" "clock.o" "lcd1602.o" "light_sensor.o" "soil_sensor.o" "spi.o" "timer.o" "uart.o" "ticlang\startup_mspm0g3507_ticlang.o" 
+	-$(RM) "Final_project_mainOld.d" "LaunchPad.d" "adc.d" "clock.d" "lcd1602.d" "light_sensor.d" "soil_sensor.d" "spi.d" "timer.d" "uart.d" "ticlang\startup_mspm0g3507_ticlang.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
