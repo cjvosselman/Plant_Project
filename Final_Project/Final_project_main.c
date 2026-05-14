@@ -1,11 +1,12 @@
 //*****************************************************************************
 //*****************************    C Source Code    ***************************
 //*****************************************************************************
-//  DESIGNER NAME:  Joshua Carlson and Casey Vosselman
 //
-//       PROJECT NAME:  Plant Monitoring System
+//    DESIGNER NAME:  Joshua Carlson and Casey Vosselman
 //
-//      FILE NAME:  Final_project_main.c
+//    PROJECT NAME:  Plant Monitoring System
+//
+//    FILE NAME:  Final_project_main.c
 //
 //-----------------------------------------------------------------------------
 //
