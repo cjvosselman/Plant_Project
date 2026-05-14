@@ -1,7 +1,7 @@
 ******************************************************************************
             TI ARM Clang Linker PC v4.0.0                      
 ******************************************************************************
->> Linked Wed May 13 12:14:19 2026
+>> Linked Thu May 14 09:01:36 2026
 
 OUTPUT FILE NAME:   <Final_Project.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00001fbd
@@ -145,15 +145,15 @@ section   page    origin      length       input sections
                   000022de    00000011     Final_project_main.o (.rodata.str1.158293686427810717601)
                   000022ef    00000011     Final_project_main.o (.rodata.str1.2111913673257691011)
                   00002300    0000000f     Final_project_main.o (.rodata.str1.55932294812474455831)
-                  0000230f    0000000d     soil_sensor.o (.rodata.str1.107477899473405917431)
-                  0000231c    0000000d     soil_sensor.o (.rodata.str1.157815876255455950781)
-                  00002329    0000000a     Final_project_main.o (.rodata.str1.66246362225142467361)
-                  00002333    00000008     light_sensor.o (.rodata.str1.169528452958725161131)
-                  0000233b    00000008     light_sensor.o (.rodata.str1.37588485510668260261)
-                  00002343    00000008     light_sensor.o (.rodata.str1.85769062010376098981)
-                  0000234b    00000007     soil_sensor.o (.rodata.str1.19066637801956105941)
-                  00002352    00000005     Final_project_main.o (.rodata.str1.96459432753672352261)
-                  00002357    00000001     --HOLE-- [fill = 0]
+                  0000230f    0000000b     soil_sensor.o (.rodata.str1.107477899473405917431)
+                  0000231a    0000000b     soil_sensor.o (.rodata.str1.157815876255455950781)
+                  00002325    0000000a     Final_project_main.o (.rodata.str1.66246362225142467361)
+                  0000232f    00000008     light_sensor.o (.rodata.str1.169528452958725161131)
+                  00002337    00000008     light_sensor.o (.rodata.str1.37588485510668260261)
+                  0000233f    00000008     light_sensor.o (.rodata.str1.85769062010376098981)
+                  00002347    00000007     soil_sensor.o (.rodata.str1.19066637801956105941)
+                  0000234e    00000005     Final_project_main.o (.rodata.str1.96459432753672352261)
+                  00002353    00000005     --HOLE-- [fill = 0]
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
@@ -196,9 +196,9 @@ MODULE SUMMARY
        clock.o                        508    0         4      
        light_sensor.o                 472    24        1      
        uart.o                         212    0         0      
-       soil_sensor.o                  136    33        0      
+       soil_sensor.o                  136    29        0      
     +--+------------------------------+------+---------+---------+
-       Total:                         7554   431       10     
+       Total:                         7554   427       10     
                                                               
     .\ticlang\
        startup_mspm0g3507_ticlang.o   12     192       0      
@@ -230,7 +230,7 @@ MODULE SUMMARY
        Stack:                         0      0         512    
        Linker Generated:              0      27        0      
     +--+------------------------------+------+---------+---------+
-       Grand Total:                   8412   650       2570   
+       Grand Total:                   8412   646       2570   
 
 
 LINKER GENERATED COPY TABLES

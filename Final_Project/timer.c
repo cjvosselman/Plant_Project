@@ -264,10 +264,9 @@ void TIMG8_IRQHandler(void) {
 
 } /* TIMG8_IRQHandler */
 
-///////////////////////////////////////////////////////////////////////////////
-
+//------------------------------------------------------------------------------
 // DESCRIPTION:
-//    This function configures the IOMUX to drive a motor using PWM. It
+//    This function configures the IOMUX to drive an LED using PWM. It
 //    repurposes pin PA19 to use as a timer for PWM
 //
 //
@@ -279,7 +278,7 @@ void TIMG8_IRQHandler(void) {
 //
 // RETURN:
 //     None
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void TIMA0_C0_init(void) {
   // Set PA19 for TIMA0_C0
   IOMUX->SECCFG.PINCM[IOMUX_PINCM19] =
@@ -307,10 +306,10 @@ void TIMA0_C0_init(void) {
 //   - Set TIMA0_C0 as output
 //
 // INPUT PARAMETERS:
-//     load_value - The number in which the timer counts a tick
 //
-//     compare_value - The number that the timer uses to output signals for the
-//     PWM
+//    uint32_t load_value - The terminal count value at which the timer resets.
+//		uint32_t compare_value - The value at which the timer compares and 
+//		                         toggles the PWM output.
 //
 // OUTPUT PARAMETERS:
 //     None
@@ -318,6 +317,7 @@ void TIMA0_C0_init(void) {
 // RETURN:
 //     None
 //-----------------------------------------------------------------------------
+
 void TIMA0_C0_pwm_init(uint32_t load_value, uint32_t compare_value) {
   // Reset TIMA0
   TIMA0->GPRCM.RSTCTL =

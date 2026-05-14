@@ -1,9 +1,33 @@
+// *****************************************************************************
+// ***************************    C Source Code     ****************************
+// *****************************************************************************
+//   DESIGNER NAME:  Casey Vosselman
+//
+//         VERSION:  1.0
+//
+//       FILE NAME:  timer.h
+//
+//-----------------------------------------------------------------------------
+// DESCRIPTION
+
+//    This file contains a collection of functions and variables for initializing
+//    and configuring timers used in the CSC 202 Plant Monitoring Device. 
+//
+//-----------------------------------------------------------------------------
+
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
-#include <stdbool.h>
+//-----------------------------------------------------------------------------
+// Load standard C include files
+//-----------------------------------------------------------------------------
 #include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
+
+//-----------------------------------------------------------------------------
+// Loads MSP launchpad board support macros and definitions
+//-----------------------------------------------------------------------------
 
 
 #define LOAD_VALUE (50000)
@@ -15,6 +39,11 @@
 #define TMR_CLK_PER_MSEC (TMR_CLK_PER_SECOND / 1000)
 #define SECONDS_PER_COUNT (1)
 #define MAX_ISR_COUNT_DELAY (SECONDS_PER_COUNT * 1E3)
+
+// -----------------------------------------------------------------------------
+// Prototype for Launchpad support functions
+// -----------------------------------------------------------------------------
+
 
 void TIMG8_config(uint32_t load_value);
 void TIMG8_enable(void);
