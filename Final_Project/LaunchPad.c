@@ -2441,18 +2441,6 @@ void motor0_init(void)
   IOMUX->SECCFG.PINCM[IOMUX_PINCM43] = IOMUX_PINCM43_PF_TIMA0_CCP2 | 
                                     IOMUX_PINCM_PC_CONNECTED;
 
-  // Theses are not really required for the timer. It was a hold over for 
-  // working with the L293D Motor Driver IC
-  // // Set PA31 (LD1) for output
-  // IOMUX->SECCFG.PINCM[LED1_IOMUX] = PINCM_GPIO_PIN_FUNC | 
-  //                                   IOMUX_PINCM_PC_CONNECTED;
-  // GPIOA->DOESET31_0 = LED1_MASK;
-
-  // // Set PB20 (LD2) for output
-  // IOMUX->SECCFG.PINCM[LED2_IOMUX] = PINCM_GPIO_PIN_FUNC | 
-  //                                   IOMUX_PINCM_PC_CONNECTED;
-  // GPIOA->DOESET31_0 = LED2_MASK;
-
 } /* motor0_init */
 
 
